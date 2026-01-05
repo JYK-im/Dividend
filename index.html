@@ -259,16 +259,28 @@
             }
         }
 
-        // 4. 이벤트 및 초기화
+// 4. 이벤트 및 초기화 (XML 노드 검색 최적화)
         document.addEventListener('DOMContentLoaded', () => {
             fetchWAMarts();
             
+            // 검색 이벤트: XML 구조에 맞춰 텍스트 추출 후 비교
             document.getElementById('waSearch').addEventListener('input', (e) => {
-                const keyword = e.target.value.toLowerCase();
-                const filtered = allMarts.filter(m => 
-                    (m.sh_nm || m.SH_NM || "").toLowerCase().includes(keyword) || 
-                    (m.sh_addr || m.SH_ADDR || "").toLowerCase().includes(keyword)
-                );
+                const keyword = e.target.value.toLowerCase().trim();
+                
+                // 검색어가 없으면 전체 목록 표시
+                if (!keyword) {
+                    renderMarts(allMarts);
+                    return;
+                }
+
+                const filtered = allMarts.filter(mart => {
+                    // XML 노드에서 MART(이름)와 LOC(주소) 태그의 텍스트를 추출하여 비교
+                    const name = mart.querySelector('MART')?.textContent.toLowerCase() || "";
+                    const addr = mart.querySelector('LOC')?.textContent.toLowerCase() || "";
+                    
+                    return name.includes(keyword) || addr.includes(keyword);
+                });
+
                 renderMarts(filtered);
             });
         });
