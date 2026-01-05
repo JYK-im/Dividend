@@ -216,39 +216,54 @@
             }).join('');
         }
 
-        // 3. API 호출 함수 (프록시 강화 버전)
+// 3. API 호출 함수 (오류 수정 버전)
         async function fetchWAMarts() {
             const listContainer = document.getElementById('waList');
+            // 국방부 공공데이터 포털의 샘플 데이터 URL
             const apiUrl = "https://opendata.mnd.go.kr/openapi/sample/json/DS_W_S_P_WA_SHOP_ADDR/1/100/";
             
-            // allorigins 프록시 사용 (가장 범용적)
-            const targetUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+            // 캐시 방지를 위해 타임스탬프 추가
+            const targetUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}&timestamp=${Date.now()}`;
 
             try {
                 const response = await fetch(targetUrl);
-                if (!response.ok) throw new Error('네트워크 응답 불안정');
+                if (!response.ok) throw new Error('네트워크 응답이 원활하지 않습니다.');
                 
                 const data = await response.json();
                 
-                if (data.contents) {
-                    const contents = JSON.parse(data.contents);
-                    // 국방부 API 특유의 키값 확인
-                    const rowData = contents.DS_W_S_P_WA_SHOP_ADDR?.row || contents.row;
+                // 프록시 서버에서 받은 데이터(contents)가 있는지 확인
+                if (data && data.contents) {
+                    // contents가 이미 객체일 수도 있고, 문자열일 수도 있음
+                    let contents;
+                    if (typeof data.contents === 'string') {
+                        // 문자열인 경우에만 JSON.parse 실행
+                        try {
+                            contents = JSON.parse(data.contents);
+                        } catch (e) {
+                            throw new Error('데이터 형식이 올바르지 않습니다 (JSON 파싱 실패).');
+                        }
+                    } else {
+                        contents = data.contents;
+                    }
+
+                    // 마트 데이터 배열 추출
+                    const rowData = contents.DS_W_S_P_WA_SHOP_ADDR?.row;
                     
-                    if (rowData) {
+                    if (rowData && Array.isArray(rowData)) {
                         allMarts = rowData;
                         renderMarts(allMarts);
                     } else {
-                        throw new Error('데이터 구조 불일치');
+                        throw new Error('마트 정보 데이터를 찾을 수 없습니다.');
                     }
                 }
             } catch (error) {
-                console.error("로드 실패:", error);
+                console.error("로드 실패 상세:", error);
                 if (listContainer) {
                     listContainer.innerHTML = `
                         <div class="col-span-full text-center py-10">
-                            <p class="text-[10px] text-gray-500 mb-2">마트 정보를 불러올 수 없습니다.</p>
-                            <p class="text-[9px] text-red-400 opacity-60">${error.message === 'Unexpected token <' ? 'API 접근 권한 제한' : error.message}</p>
+                            <p class="text-[10px] text-gray-500 mb-2">현재 API 서버 또는 프록시 서버 응답에 문제가 있습니다.</p>
+                            <p class="text-[9px] text-red-400 opacity-60">오류: ${error.message}</p>
+                            <button onclick="fetchWAMarts()" class="mt-3 text-[9px] border border-gray-700 px-2 py-1 rounded hover:bg-white/5 transition-all">다시 시도</button>
                         </div>`;
                 }
             }
