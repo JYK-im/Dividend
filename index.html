@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
+
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700&display=swap');
         body { font-family: 'Pretendard', sans-serif; background-color: #121418; color: #e1e1e1; overflow-x: hidden; }
         .accent-khaki { color: #8a9a5b; } 
@@ -17,6 +18,8 @@
         ::-webkit-scrollbar-track { background: #121418; }
         ::-webkit-scrollbar-thumb { background: #2d333e; border-radius: 5px; }
 
+
+
 /* 라이트 모드 전환 시 강제 적용될 스타일 */
 html.light body { background-color: #f8fafc !important; color: #1e293b !important; }
 html.light .bg-card { background-color: #ffffff !important; border: 1px solid #e2e8f0 !important; color: #1e293b !important; }
@@ -25,7 +28,7 @@ html.light header { border-bottom-color: #e2e8f0 !important; }
 /* 글자색 반전 처리 */
 html.light .text-white { color: #1e293b !important; }
 html.light .text-gray-500, html.light .text-gray-600 { color: #64748b !important; }
-html.light .accent-khaki { color: #626f3d !important; } /* 가독성을 위해 조금 더 어두운 카키 */
+html.light .accent-khaki { color: #626f3d !important; }
 
 /* 마트/공고 리스트 배경색 조정 */
 html.light .bg-black\/20 { background-color: #f1f5f9 !important; border-color: #e2e8f0 !important; }
@@ -67,7 +70,7 @@ html.light #chatBlindOverlay { background-color: rgba(248, 250, 252, 0.95) !impo
     <main class="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-4 gap-6">
         
         <div class="xl:col-span-1 space-y-6">
-            <section class="bg-card p-5 rounded-2xl shadow-xl">
+            <section class="bg-card p-5 rounded-2xl shadow-xl transition-all">
                 <h2 class="text-sm font-bold mb-4 accent-khaki flex items-center gap-2 border-b border-gray-800 pb-2">
                     <i class="fa-solid fa-fire"></i> 실시간 인기글
                 </h2>
@@ -88,8 +91,8 @@ html.light #chatBlindOverlay { background-color: rgba(248, 250, 252, 0.95) !impo
                     <p class="text-[10px] accent-khaki font-bold mb-1">행군 공식 블로그</p>
                     <p class="font-bold text-sm group-hover:underline text-white">군인가족 혜택 가이드 보기</p>
                 </a>
-                <a href="https://www.welfare.mil.kr/kukinfo/board/board.do?forwardName=kukinfo.board.list&be_id=h_package&ssv=bm_title&sm=OR&kw=&ct=0&cateCd1=0&area_cd1=" class="block bg-[#8a9a5b] p-4 rounded-xl text-black transition-transform hover:scale-[1.02]">
-                    <p class="text-[10px] font-bold opacity-80">추천 서비스</p>
+                <a href="https://www.welfare.mil.kr/kukinfo/board/board.do?forwardName=kukinfo.board.list&be_id=h_package&ssv=bm_title&sm=OR&kw=&ct=0&cateCd1=0&area_cd1=" class="block bg-card p-4 rounded-xl border border-gray-800 hover:border-[#8a9a5b] transition-all group">
+                    <p class="text-[10px] accent-khaki font-bold mb-1">추천 서비스</p>
                     <p class="font-bold text-sm">국방복지단 혜택 확인</p>
                 </a>
             </section>
@@ -97,7 +100,7 @@ html.light #chatBlindOverlay { background-color: rgba(248, 250, 252, 0.95) !impo
 
         <div class="xl:col-span-2 space-y-6">
             
-            <section class="bg-card p-6 rounded-2xl shadow-lg border-b border-[#8a9a5b]/30">
+            <section class="bg-card p-6 rounded-2xl shadow-lg border-b border-[#8a9a5b]/30 transition-all">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-xl font-bold flex items-center gap-2">
                         <i class="fa-solid fa-thumbtack accent-khaki"></i> 주요 정보 업데이트
@@ -127,7 +130,7 @@ html.light #chatBlindOverlay { background-color: rgba(248, 250, 252, 0.95) !impo
             </section>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <section class="bg-card p-6 rounded-2xl shadow-xl border-b border-[#8a9a5b]/30">
+                <section class="bg-card p-6 rounded-2xl shadow-xl border-b border-[#8a9a5b]/30 transition-all">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                         <h3 class="text-xl font-bold flex items-center gap-2">
                             <i class="fa-solid fa-cart-shopping accent-khaki"></i> 영외마트(WA) 현황
@@ -142,7 +145,7 @@ html.light #chatBlindOverlay { background-color: rgba(248, 250, 252, 0.95) !impo
                     </div>
                 </section>
 
-                <section class="bg-card p-5 rounded-2xl h-fit min-h-[300px]">
+                <section class="bg-card p-5 rounded-2xl h-fit min-h-[300px] transition-all">
     <h3 class="text-sm font-bold mb-4 flex items-center gap-2 border-b border-gray-800 pb-2">
         <i class="fa-solid fa-house-user accent-khaki"></i> 군 특별공급 공고
     </h3>
@@ -159,7 +162,7 @@ html.light #chatBlindOverlay { background-color: rgba(248, 250, 252, 0.95) !impo
         </div>
 
         <div class="xl:col-span-1">
-            <section class="bg-card p-5 rounded-2xl h-[650px] flex flex-col shadow-2xl relative overflow-hidden">
+            <section class="bg-card p-5 rounded-2xl h-[650px] flex flex-col shadow-2xl relative overflow-hidden transition-all">
     <h2 class="text-sm font-bold mb-4 accent-khaki border-b border-gray-800 pb-2 uppercase tracking-widest flex items-center gap-2">
         <i class="fa-solid fa-comments text-[10px]"></i> Live Talk
     </h2>
