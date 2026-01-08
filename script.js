@@ -30,15 +30,16 @@ function updateThemeIcon(isLight) {
 }
 
     // 2. Firebase 설정 및 초기화 (한 번만 선언)
-    const firebaseConfig = {
-        apiKey: "AIzaSyDaNMdpDXgiuELEO65Wk0PazVT2yeQeags",
-        authDomain: "dividend-b090d.firebaseapp.com",
-        projectId: "dividend-b090d",
-        storageBucket: "dividend-b090d.appspot.com",
-        messagingSenderId: "543720180150",
-        appId: "1:543720180150:web:15073a1e9706bb1f949917",
-        databaseURL: "https://dividend-b090d-default-rtdb.firebaseio.com"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyDaNmDpDXgiuELEO65Wk0PazVT2yeQeags",
+  authDomain: "dividend-b090d.firebaseapp.com",
+  databaseURL: "https://dividend-b090d-default-rtdb.firebaseio.com",
+  projectId: "dividend-b090d",
+  storageBucket: "dividend-b090d.firebasestorage.app",
+  messagingSenderId: "543720180150",
+  appId: "1:543720180150:web:15073a1e9706bb1f949917",
+  measurementId: "G-W0JHGMMGHC"
+};
 
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
