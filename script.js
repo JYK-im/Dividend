@@ -355,31 +355,35 @@ function sendChat() {
 // 블로그 최신글 로드 함수
 async function loadBlogUpdates() {
     const blogRssUrl = "https://rss.blog.naver.com/stream_deck";
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(blogRssUrl)}&_=${Date.now()}`;
+    // 'get' 대신 'raw'를 사용하여 더 직관적으로 데이터를 가져옵니다.
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(blogRssUrl)}`;
     const container = document.getElementById('blogUpdateList');
 
     try {
         const response = await fetch(proxyUrl);
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error('네트워크 응답에 문제가 있습니다.');
         
-        const data = await response.json();
+        const xmlText = await response.text(); // raw 데이터를 텍스트로 바로 받음
         const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(data.contents, "text/xml");
-        const items = Array.from(xmlDoc.querySelectorAll('item')).slice(0, 3); // 상위 3개만 표시
+        const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+        
+        // XML 파싱 에러 확인
+        const parseError = xmlDoc.getElementsByTagName("parsererror");
+        if (parseError.length > 0) throw new Error("XML 파싱 에러");
+
+        const items = Array.from(xmlDoc.querySelectorAll('item')).slice(0, 3);
 
         if (items.length > 0) {
             container.innerHTML = items.map(item => {
-                const title = item.querySelector('title').textContent;
-                const link = item.querySelector('link').textContent;
-                const pubDate = new Date(item.querySelector('pubDate').textContent);
+                const title = item.querySelector('title')?.textContent || "제목 없음";
+                const link = item.querySelector('link')?.textContent || "#";
+                const pubDate = new Date(item.querySelector('pubDate')?.textContent);
                 
-                // 날짜 포맷 (YYYY.MM.DD)
                 const dateText = pubDate.toLocaleDateString('ko-KR', {
                     year: 'numeric', month: '2-digit', day: '2-digit'
                 }).replace(/\. /g, '.').replace(/\.$/, '');
 
-                // 요약 내용 (description에서 텍스트만 추출)
-                const description = item.querySelector('description').textContent;
+                const description = item.querySelector('description')?.textContent || "";
                 const summary = description.replace(/<[^>]*>?/gm, '').substring(0, 80) + "...";
 
                 return `
@@ -394,10 +398,19 @@ async function loadBlogUpdates() {
                     </div>
                 `;
             }).join('');
+        } else {
+            container.innerHTML = `<p class="text-center py-10 text-gray-600 text-xs">최신 게시글이 없습니다.</p>`;
         }
     } catch (error) {
-        console.error("블로그 업데이트 로드 실패:", error);
-        container.innerHTML = `<p class="text-center py-10 text-gray-600 text-xs">블로그 소식을 불러올 수 없습니다.</p>`;
+        console.error("블로그 로드 실패 상세:", error);
+        container.innerHTML = `
+            <div class="text-center py-10">
+                <p class="text-gray-600 text-xs mb-2">블로그 소식을 실시간으로 불러오지 못했습니다.</p>
+                <button onclick="window.open('https://blog.naver.com/stream_deck', '_blank')" 
+                        class="text-[10px] text-[#8a9a5b] underline">
+                    블로그에서 직접 확인하기
+                </button>
+            </div>`;
     }
 }
 
@@ -408,3 +421,4 @@ function formatTimeAgo(date) {
     if (diff < 1440) return `${Math.floor(diff / 60)}시간 전`;
     return `${Math.floor(diff / 1440)}일 전`;
 }
+
