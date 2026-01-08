@@ -92,33 +92,17 @@ html.light #chatBlindOverlay { background-color: rgba(248, 250, 252, 0.95) !impo
         <div class="xl:col-span-2 space-y-6">
             
             <section class="bg-card p-6 rounded-2xl shadow-lg border-b border-[#8a9a5b]/30 transition-all">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-bold flex items-center gap-2">
-                        <i class="fa-solid fa-thumbtack accent-khaki"></i> 주요 정보 업데이트
-                    </h2>
-                    <button class="text-[10px] text-gray-500 hover:text-white transition-colors">전체보기 +</button>
-                </div>
-                
-                <div class="grid grid-cols-1 gap-4">
-                    <div class="group cursor-pointer p-4 bg-black/20 rounded-xl border border-gray-800 hover:border-[#8a9a5b] transition-all">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-[9px] bg-[#8a9a5b] text-black px-2 py-0.5 rounded font-bold uppercase tracking-tighter">초급간부</span>
-                            <span class="text-[10px] text-gray-600 font-medium">2026.01.05</span>
-                        </div>
-                        <h3 class="font-bold text-sm group-hover:text-[#8a9a5b] mb-1">2026년 초급간부 당직근무비 인상 확정 및 지급 시기 안내</h3>
-                        <p class="text-[11px] text-gray-500 line-clamp-1 leading-relaxed">올해부터 평일 2만원, 주말 4만원으로 인상된 당직비가 1월 급여부터 소급 적용됩니다.</p>
-                    </div>
-
-                    <div class="group cursor-pointer p-4 bg-black/20 rounded-xl border border-gray-800 hover:border-[#8a9a5b] transition-all">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-[9px] bg-blue-600 text-white px-2 py-0.5 rounded font-bold uppercase tracking-tighter">군인가족</span>
-                            <span class="text-[10px] text-gray-600 font-medium">2026.01.03</span>
-                        </div>
-                        <h3 class="font-bold text-sm group-hover:text-[#8a9a5b] mb-1">군인 자녀 교육지원금 및 호국장학금 신청 서류 안내</h3>
-                        <p class="text-[11px] text-gray-500 line-clamp-1 leading-relaxed">자녀 장학금 신청을 위한 복무확인서 및 성적 증명서 제출 기한을 확인하세요.</p>
-                    </div>
-                </div>
-            </section>
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold flex items-center gap-2">
+            <i class="fa-solid fa-thumbtack accent-khaki"></i> 주요 정보 업데이트 (블로그)
+        </h2>
+        <button onclick="window.open('https://blog.naver.com/stream_deck', '_blank')" class="text-[10px] text-gray-500 hover:text-white transition-colors">전체보기 +</button>
+    </div>
+    
+    <div id="blogUpdateList" class="grid grid-cols-1 gap-4">
+        <p class="text-center py-10 text-gray-600 animate-pulse text-xs">최신 블로그 소식을 가져오는 중...</p>
+    </div>
+</section>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <section class="bg-card p-6 rounded-2xl shadow-xl border-b border-[#8a9a5b]/30 transition-all">
