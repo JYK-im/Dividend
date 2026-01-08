@@ -72,7 +72,7 @@ function handleLogin() {
             chatArea.classList.remove('opacity-20', 'pointer-events-none', 'select-none');
             
             document.getElementById('loginBtn').innerText = "로그아웃";
-            document.getElementById('loginBtn').onclick = handleLogout;
+document.getElementById('loginBtn').onclick = handleLogout;
             console.log("로그인 성공:", currentUser.displayName);
         })
         .catch((error) => {
@@ -317,6 +317,7 @@ async function loadAptNotices() {
 document.addEventListener('DOMContentLoaded', () => {
     loadMartData();   // 영외마트 로드
     loadAptNotices(); // 특별공급 로드
+    loadBlogPosts(); // 블로그 로드
     
     // 검색 기능: renderMarts(allMarts) 호출
     document.getElementById('waSearch')?.addEventListener('input', (e) => {
@@ -351,3 +352,49 @@ function sendChat() {
 }
 
 
+// 블로그 최신글 로드 함수
+async function loadBlogPosts() {
+    const blogRssUrl = "https://rss.blog.naver.com/stream_deck";
+    // allorigins 프록시 사용 시 캐시를 피하기 위해 타임스탬프 추가
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(blogRssUrl)}&_=${Date.now()}`;
+    const hotPostsContainer = document.getElementById('hotPosts');
+
+    try {
+        const response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        const data = await response.json();
+        const parser = new DOMParser();
+        // allorigins는 XML 문자열을 data.contents에 담아줍니다.
+        const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+        const items = Array.from(xmlDoc.querySelectorAll('item')).slice(0, 5);
+
+        if (items.length > 0) {
+            hotPostsContainer.innerHTML = items.map(item => {
+                const title = item.querySelector('title').textContent;
+                const link = item.querySelector('link').textContent;
+                // 네이버 RSS 날짜 파싱
+                const pubDate = new Date(item.querySelector('pubDate').textContent);
+                const timeText = formatTimeAgo(pubDate);
+
+                return `
+                    <div class="group cursor-pointer py-1" onclick="window.open('${link}', '_blank')">
+                        <p class="font-bold truncate group-hover:text-[#8a9a5b]">• ${title}</p>
+                        <span class="text-[9px] text-gray-500">${timeText} · 네이버 블로그</span>
+                    </div>
+                `;
+            }).join('');
+        }
+    } catch (error) {
+        console.error("블로그 로드 실패:", error);
+        hotPostsContainer.innerHTML = `<p class="text-center py-4 text-gray-600 text-[10px]">블로그 소식을 가져올 수 없습니다.</p>`;
+    }
+}
+
+// 시간 계산 보조 함수
+function formatTimeAgo(date) {
+    const diff = Math.floor((new Date() - date) / (1000 * 60));
+    if (diff < 60) return `${diff}분 전`;
+    if (diff < 1440) return `${Math.floor(diff / 60)}시간 전`;
+    return `${Math.floor(diff / 1440)}일 전`;
+}
