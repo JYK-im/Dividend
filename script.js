@@ -72,6 +72,7 @@ function handleLogin() {
             chatArea.classList.remove('opacity-20', 'pointer-events-none', 'select-none');
             
             document.getElementById('loginBtn').innerText = "로그아웃";
+            document.getElementById('loginBtn').onclick = handleLogout;
             console.log("로그인 성공:", currentUser.displayName);
         })
         .catch((error) => {
@@ -348,4 +349,5 @@ function sendChat() {
     input.value = "";
     box.scrollTop = box.scrollHeight;
 }
+
 
